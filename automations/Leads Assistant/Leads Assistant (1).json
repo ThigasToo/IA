@@ -1,0 +1,202 @@
+{
+  "name": "Leads Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1dl-RLtwBzucpGs9EfxCSKUKqD1HSqMjaC4NM4n9Zh6Q",
+          "mode": "list",
+          "cachedResultName": "Teste",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dl-RLtwBzucpGs9EfxCSKUKqD1HSqMjaC4NM4n9Zh6Q/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 920192364,
+          "mode": "list",
+          "cachedResultName": "Respostas ao formulário 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dl-RLtwBzucpGs9EfxCSKUKqD1HSqMjaC4NM4n9Zh6Q/edit#gid=920192364"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "42095c16-6253-4ccc-8cf1-dbb0bd908687",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "0goxGLiKTd6wVGNN",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json['Column 1'] }}\n{{ $json['Column 2'] }}\n{{ $json['Column 3'] }}\n{{ $json['Column 4'] }}",
+        "options": {
+          "systemMessage": "You are a leads assistant. You will process the leads information and, using your Client message tool, send a confirmation email about the client subscription to our financial event called Valuation Auto. You will also send an email, using the Me message tool, to Thiago, saying that theres is one more subscription, with their name, email and brief sum of their motivation.\n\n## Tools: \n- Client message: use to send a confirmation message to the client\n- Me message: use to send Thiago a new lead message \n\n## Notes:\n- All your messages must be in portuguese-br"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "67d753dd-4fe7-43d2-b9db-ecb8d3d6bebc",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        80,
+        208
+      ],
+      "id": "18e64ddf-219e-477f-a61d-eab814934384",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "zaKuMVyDHpNHl3bi",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "emailType": "text",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        448,
+        224
+      ],
+      "id": "7c19209d-093f-4d89-afac-3f976da45374",
+      "name": "Client message",
+      "webhookId": "a5303dce-20b7-4b54-9206-b2e5d79d85c5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "nyafGjyjVuOl7yDS",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "aqueleeuapolo2@gmail.com",
+        "subject": "Mais um contato",
+        "emailType": "text",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        304,
+        256
+      ],
+      "id": "3bfa96c3-73dc-42f8-aef4-601e2e55120a",
+      "name": "Me message",
+      "webhookId": "280230c4-e337-4e4b-9c08-13466c8b8479",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "nyafGjyjVuOl7yDS",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    },
+    "Client message": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Me message": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "42e4b093-019b-45fe-836a-37d8516a43c2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ddf5a12650b4eae5e16ac493de453015a92f0b141f2b3fd43b8c640cf18fa182"
+  },
+  "id": "PgYenMOUlp3CS5vG",
+  "tags": []
+}
