@@ -1,0 +1,207 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "mode": "webhook",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "32ae1656-6965-48e1-858f-ae788e9eb076",
+      "name": "When chat message received",
+      "webhookId": "978893ea-37ac-4fe3-b893-de031c9abab7"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=##Role\nYou are a helpful web assistant. Your role is to help customers in our website, chating with them about their doubts about our services. Make sure your respones are short and objective\n\n##Tools:\n1. Gmail: when the customer asks for a human response, get their information (name, subject, email, question), than creates and send an gmail using this tool. Make sure to insure the customer that we will get in touch soon! You must structure as follow: \n   - Name: \n   - Email: \n   - Question:\n\n2. rag_question: when asked questions about our services, use this tool to get a answer\n\n##Notes:\n- Only respond questions related to our company\n- All conversation must happen in portuguese-br\n- Make your respones short and objective\n- Use the chat input ({{ $json.chatInput }}) to create your responses and to use tools "
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "412a9ba9-9f8e-4fa5-9082-3e6da6c960f9",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        80,
+        208
+      ],
+      "id": "419c0519-119a-44e3-bcb5-80a2f8e9e20d",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "zaKuMVyDHpNHl3bi",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        208
+      ],
+      "id": "a87100ad-8606-42b1-bc18-d7dc845c5b90",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "0gEw5bAOgRKOyh4g",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "aqueleeuapolo@gmail.com",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "emailType": "text",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        320,
+        336
+      ],
+      "id": "cdd0f54a-5f1a-4008-a348-4abf9c837e87",
+      "name": "Send a message in Gmail",
+      "webhookId": "1e196202-3529-4c85-9074-93276fef89a4",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "nyafGjyjVuOl7yDS",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://prod-1-data.ke.pinecone.io/assistant/chat/teste",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Api-Key",
+              "value": "pcsk_59Zz2k_LjqJL7pyjnmNEa1Rh99snjtmxu1tWs6XU5xiyqUAfAgNCHa4s2Z6akBPpa7UNvW"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "X-Pinecone-API-Version",
+              "value": "2025-04"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('JSON', `Use this json to get a response, filling the {rag_question} with the user question: \n{\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"{rag_question}\"\n    }\n  ],\n  \"stream\": false,\n  \"model\": \"gpt-4o\"\n}`, 'json') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        464,
+        224
+      ],
+      "id": "5557dc3a-f39d-4b51-8d1e-c1c6342ec396",
+      "name": "rag_question"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "rag_question": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e19c64da-6104-4190-83dc-f0aa6d38f6b1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ddf5a12650b4eae5e16ac493de453015a92f0b141f2b3fd43b8c640cf18fa182"
+  },
+  "id": "SYRnPFLRJ8iTzVMa",
+  "tags": []
+}
