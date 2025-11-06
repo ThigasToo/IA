@@ -1,14 +1,9 @@
 # Prompt_engineering
 Aprenda a fazer um prompt para seus agentes 
 
-# 5 partes: 
-
-<img width="200" height="300" alt="Captura de tela 2025-09-01 225001" src="https://github.com/user-attachments/assets/265c65d8-0488-4815-ac8a-0e85b35f0179" />
+# 6 partes: 
 
 ## 🧻 Papel
-
-<img width="200" height="30" alt="image" src="https://github.com/user-attachments/assets/64a34f96-971b-4c12-8115-decd82eb6cbf" />
-
 A atribuição de papel é uma técnica onde ao modelo de linguagem é atribuído um papel específico para desempenhar durante a interação. Isso ajuda a imergir o modelo no papel e pode melhorar o desempenho em tarefas subsequentes.
 
 Exemplo:
@@ -22,8 +17,6 @@ Neste exemplo, o papel (roteirista de conteúdo de formato curto altamente quali
 
 
 ## 📕 Tarefa
-<img width="200" height="30" alt="image" src="https://github.com/user-attachments/assets/81ea8e76-e89e-4e80-b573-ebd89bcc3269" />
-
 A tarefa é o que a maioria das pessoas normalmente fornece a um modelo esperando um resultado. É uma descrição direta do que elas querem alcançar.
 
 Exemplo:
@@ -42,8 +35,6 @@ Exemplo com Variáveis:
 
 
 ## 📒 Específicos 
-<img width="200" height="30" alt="image" src="https://github.com/user-attachments/assets/656ebe86-643f-4d53-84de-21b06e4a4c00" />
-
 A seção de especificações é uma oportunidade para listar as notas mais importantes sobre a execução da tarefa descrita acima.
 
 O formato de lista permite que você adicione facilmente novas instruções enquanto testa e melhora o prompt. Claro, tente não acumular informações desnecessárias aqui. Menos é mais.
@@ -54,8 +45,6 @@ Exemplo de Especificações:
 - Etc.
 
 ## 📝 Contexto
-<img width="200" height="40" alt="image" src="https://github.com/user-attachments/assets/5ff2f55f-914a-427e-81a3-c4caa1be9a24" />
-
 Fornecer contexto sobre em qual ambiente o LLM está operando e por que ele está realizando essa tarefa específica pode ajudar a aumentar ainda mais o desempenho.
 
 Isso combina técnicas anteriores como a Atribuição de Papel (Role Prompting), ao esclarecer ainda mais quem ele é, o que está fazendo e por que está fazendo. O Prompt Emocional (EmotionPrompt) também pode ser usado aqui ao explicar a importância do papel do LLM no sucesso do negócio e até mesmo da sociedade como um todo.
@@ -70,8 +59,6 @@ Notas Gerais:
 
 
 ## 📗 Exemplos
-<img width="200" height="100" alt="image" src="https://github.com/user-attachments/assets/30a14bf7-667d-403f-b2bb-5e5f36099e91" />
-
 Na seção de exemplos, usamos uma técnica conhecida como Few-Shot Prompting (Prompting com Poucos Exemplos) para aumentar o desempenho e ajustar finamente o tom, o formato e o comprimento da resposta.
 
 Isso ocorre quando vários exemplos de entrada e saída são fornecidos ao modelo de linguagem como parte do prompt. Isso permite que o modelo execute novas tarefas sem a necessidade de ajuste fino (fine-tuning).
@@ -85,8 +72,6 @@ Principais Conclusões:
 - A maior parte dos ganhos pode ser alcançada com 10 a 32 exemplos bem-elaborados.
 
 ## 📃 Notas
-<img width="200" height="30" alt="image" src="https://github.com/user-attachments/assets/55506af1-354d-4540-b338-a8bf7da8f25b" />
-
 A seção de notas é sua última chance de lembrar o LLM (Modelo de Linguagem Grande) dos aspectos-chave da tarefa e adicionar quaisquer detalhes finais para ajustar as saídas ao seu estilo desejado.
 
 Suas notas formam uma lista que consiste em coisas como:
